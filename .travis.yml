@@ -1,0 +1,22 @@
+language: go
+
+sudo: false
+
+env:
+  - DEP_VERSION="0.4.1"
+
+go:
+  - "1.11"
+
+cache:
+  directories:
+    - $GOPATH/pkg/dep
+
+install:
+  - make setup_ci
+
+script:
+  - make build
+  - make test
+  - make lint
+  - docker build .
