@@ -1,0 +1,36 @@
+{
+  "executionRoleArn": "{{ .MustEnv "EXECUTION_ROLE" }}",
+  "containerDefinitions": [
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "{{ .MustEnv "LOGGROUP" }}",
+          "awslogs-region": "{{ .MustEnv "AWS_REGION" }}",
+          "awslogs-stream-prefix": "ubuntu-image"
+        }
+      },
+      "command": [
+        "/bin/bash",
+        "-c",
+        "date"
+      ],
+      "image": "ubuntu:latest",
+      "essential": true,
+      "readonlyRootFilesystem": true,
+      "name": "ubuntu-image"
+    }
+  ],
+  "memory": "512",
+  "compatibilities": [
+    "EC2",
+    "FARGATE"
+  ],
+  "family": "ubuntu-testing-image",
+  "requiresCompatibilities": [
+    "EC2",
+    "FARGATE"
+  ],
+  "networkMode": "awsvpc",
+  "cpu": "256"
+}

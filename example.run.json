@@ -1,0 +1,12 @@
+{
+  "cluster": "{{ .MustEnv "CLUSTER" }}",
+  "count": 1,
+  "group": "myapp-task",
+  "launchType": "FARGATE",
+  "TaskDefinition": "{{ .Task.TaskDefinitionArn }}",
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "subnets": ["{{ .MustEnv "SUBNET" }}"]
+    }
+  }
+}
