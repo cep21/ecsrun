@@ -626,7 +626,7 @@ func (t Ctx) JSON(key string) (string, error) {
 	return string(res), nil
 }
 
-// JSON converts a string into a JSON string, but does not return the starting and ending "
+// JSONStr converts a string into a JSON string, but does not return the starting and ending "
 // This lets you use a JSON template that is itself still JSON
 func (t Ctx) JSONStr(key string) (string, error) {
 	res, err := json.Marshal(key)
