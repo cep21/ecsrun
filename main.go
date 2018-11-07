@@ -163,7 +163,7 @@ func (a *Application) mainReturnCode() (int, error) {
 	logger.Log(2, "Finished making run task template: %s", runTaskTemplate.String())
 	exitCode, runErr := a.TaskExecutor.Run(ctx, ecsClient, cloudwatchLogsClient, runTaskTemplate, taskDef, a.out, &logger)
 	if runErr != nil {
-		return 0, errors.Wrap(err, "unable to finish running task")
+		return 0, errors.Wrap(runErr, "unable to finish running task")
 	}
 	logger.Log(2, "Finished running task (exit code %d)", exitCode)
 	return exitCode, nil
@@ -349,10 +349,10 @@ func (t *TaskExecutor) loopWhileRunning(ctx context.Context, ecsClient *ecs.ECS,
 			return errors.Wrapf(err, "unable to describe task.  Is it still valid?")
 		}
 		if len(out.Failures) != 0 {
-			return errors.Wrapf(err, "ECS reported failure running some of your tasks")
+			return errors.New("ECS reported failure running some of your tasks")
 		}
 		if len(out.Tasks) != 1 {
-			return errors.Wrapf(err, "logic error: I should only see one task at a time here")
+			return errors.New("logic error: I should only see one task at a time here")
 		}
 		currentTaskState := out.Tasks[0]
 		logger.Log(2, "States (last=%s desired=%s)", emptyOnNil(currentTaskState.LastStatus), emptyOnNil(currentTaskState.DesiredStatus))
@@ -510,10 +510,10 @@ func (t *TaskExecutor) waitForExitCode(ctx context.Context, ecsClient *ecs.ECS, 
 			return 0, errors.Wrapf(err, "unable to describe task.  Is it still valid?")
 		}
 		if len(out.Failures) != 0 {
-			return 0, errors.Wrapf(err, "ECS reported failure running some of your tasks")
+			return 0, errors.New("ECS reported failure running some of your tasks")
 		}
 		if len(out.Tasks) != 1 {
-			return 0, errors.Wrapf(err, "logic error: I should only see one task at a time here")
+			return 0, errors.New("logic error: I should only see one task at a time here")
 		}
 		firstTask := out.Tasks[0]
 		logger.Log(2, "States (last=%s desired=%s)", emptyOnNil(firstTask.LastStatus), emptyOnNil(firstTask.DesiredStatus))
@@ -545,10 +545,10 @@ func (t *TaskExecutor) Run(ctx context.Context, ecsClient *ecs.ECS, logClient *c
 		return 0, errors.Wrapf(err, "unable to execute task (is your task definition ok?")
 	}
 	if len(out.Failures) != 0 {
-		return 0, errors.Wrapf(err, "ECS reported failure running some of your tasks")
+		return 0, errors.New("ECS reported failure running some of your tasks")
 	}
 	if len(out.Tasks) != 1 {
-		return 0, errors.Wrapf(err, "this script currently only supports one task at a time")
+		return 0, errors.New("this script currently only supports one task at a time")
 	}
 	executingTask := out.Tasks[0]
 	logger.Log(1, "Follow along: %s", taskURL(emptyOnNil(ecsClient.Config.Region), emptyOnNil(in.Cluster), emptyOnNil(executingTask.TaskArn)))
