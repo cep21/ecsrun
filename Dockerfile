@@ -1,4 +1,4 @@
-FROM golang:1.11.1
+FROM golang:1.12.1
 RUN apt-get update
 RUN apt-get install -y ca-certificates
 WORKDIR /go/src/github.com/cep21/ecsrun

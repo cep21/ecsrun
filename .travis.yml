@@ -3,20 +3,20 @@ language: go
 sudo: false
 
 env:
-  - DEP_VERSION="0.4.1"
+  global:
+    - GO111MODULE=on
 
 go:
-  - "1.11"
+  - "1.12"
 
 cache:
   directories:
-    - $GOPATH/pkg/dep
+    - $GOPATH/pkg/mod
 
 install:
   - make setup_ci
 
 script:
+  - make lint
   - make build
   - make test
-  - make lint
-    #  - docker build .
