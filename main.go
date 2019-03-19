@@ -66,7 +66,7 @@ func (l *Logger) Log(verbosity int, msg string, args ...interface{}) {
 	log.Printf(msg, args...)
 }
 
-var app = Application{
+var app = Application{ // nolint
 	args:   os.Args[1:],
 	out:    os.Stdout,
 	osExit: os.Exit,
@@ -79,7 +79,7 @@ var app = Application{
 func (a *Application) Main() {
 	code, err := a.mainReturnCode()
 	if err != nil {
-		if _, fmtErr := fmt.Fprintf(a.err, err.Error()); fmtErr != nil {
+		if _, fmtErr := fmt.Fprint(a.err, err.Error()); fmtErr != nil {
 			panic(fmtErr)
 		}
 		if code == 0 {
@@ -398,7 +398,7 @@ func (l *logsToStream) GetURL(region *string) string {
 }
 
 func (t *TaskExecutor) extraAWSLogNames(runningTask *ecs.Task, taskDef *ecs.TaskDefinition) ([]logsToStream, error) {
-	var ret []logsToStream
+	ret := make([]logsToStream, 0, len(taskDef.ContainerDefinitions))
 	for _, cd := range taskDef.ContainerDefinitions {
 		if cd.LogConfiguration == nil {
 			continue
