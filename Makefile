@@ -16,4 +16,4 @@ lint:
 
 # ci installs dep by direct version.  Users install with 'go get'
 setup_ci:
-	GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.15.0
+	GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.17.1

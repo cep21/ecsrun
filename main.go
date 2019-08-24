@@ -379,6 +379,9 @@ func taskID(s string) string {
 	if len(v) == 2 {
 		return v[1]
 	}
+	if len(v) == 3 {
+		return v[1] + v[2]
+	}
 	return s
 }
 
@@ -567,7 +570,7 @@ func (t *TaskExecutor) Run(ctx context.Context, ecsClient *ecs.ECS, logClient *c
 			logger.Log(1, "Failure attempting to force stop task: %s", stopTaskErr.Error())
 		}
 	}()
-	if waitingErr := t.waitForNotPending(ctx, ecsClient, executingTask, logger); err != nil {
+	if waitingErr := t.waitForNotPending(ctx, ecsClient, executingTask, logger); waitingErr != nil {
 		return 0, errors.Wrapf(waitingErr, "unable to wait for task to leave pending state")
 	}
 
