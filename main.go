@@ -380,7 +380,7 @@ func taskID(s string) string {
 		return v[1]
 	}
 	if len(v) == 3 {
-		return v[1] + v[2]
+		return v[2]
 	}
 	return s
 }
